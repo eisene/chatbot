@@ -1,6 +1,7 @@
 from flights_query_tool import get_flights, get_todays_date
 
 from halo import Halo
+from datetime import datetime
 
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -19,7 +20,7 @@ class FlightBookingAgent:
     "alone and the budget is not important to them. They don't have any preferences of restrictions for their airlines "
     "or flights.\n\n"
     "Don't ask the user if they would like to book the flights, just list them.\n\n"
-    "You are a very powerful assistant but you don't know today's date and need to look it up with a tool."
+    "You are a very powerful assistant but you don't know today's date."
     MEMORY_KEY = "chat_history"
 
     llm_model_name = "gpt-3.5-turbo"
@@ -34,7 +35,7 @@ class FlightBookingAgent:
             [
                 ("system", FlightBookingAgent.AGENT_DEFINITION_PROMPT),
                 MessagesPlaceholder(variable_name=FlightBookingAgent.MEMORY_KEY),
-                ("user", "{input} Don't forget to look up today's date first if you need to!"),
+                ("user", "{input} Today's date is " + datetime.today().strftime('%Y-%m-%d')),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )

@@ -29,7 +29,7 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
         departure_date: The departure date of the flight, formatted as YYYY-MM-DD.
     
     When printing the results you get out of this tool, use the following format:
-        {index}.{airline} - Departs at: {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
+        {index}.{airline} - Departs at {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
     """
     global num_api_errors
     slices = [
@@ -58,7 +58,7 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
     res = [
         {
             'airline': offer.owner.name,
-            'departure_time': offer.slices[0].segments[0].departing_at.strftime('%Y-%m-%d'),
+            'departure_time': offer.slices[0].segments[0].departing_at.strftime('%I:%M %p'),
             'num_connections': len(offer.slices[0].segments) - 1,
             'USD_price': offer.total_amount
         }
