@@ -20,7 +20,11 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
     """Returns the flights that match the given requirements as a list of JSON objects:
         origin: The IATA code of the origin city of the flight.
         destination: The IATA code of the destination city of the flight.
-        departure_date: The departure date of the flight, formatted as YYYY-MM-DD."""
+        departure_date: The departure date of the flight, formatted as YYYY-MM-DD.
+    
+    When printing the results you get out of this tool, use the following format:
+        {index}.{airline} - Departs at: {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
+    """
     slices = [
         {
             "origin": origin,
@@ -41,7 +45,7 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
         {
             'airline': offer.owner.name,
             'departure_time': offer.slices[0].segments[0].departing_at.strftime('%Y-%m-%d'),
-            'num_flights': len(offer.slices[0].segments),
+            'num_connections': len(offer.slices[0].segments) - 1,
             'USD_price': offer.total_amount
         }
         for offer in offers
