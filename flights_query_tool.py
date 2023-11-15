@@ -1,13 +1,18 @@
 import os
+import json
 from datetime import datetime
 from langchain.agents import tool
 from duffel_api import Duffel
+from flights_rankers import departure_time_ranker, price_ranker
 
 
 if not 'DUFFEL_API_KEY' in os.environ.keys():
     raise ValueError("DUFFEL_API_KEY not specified in environment variables")
 access_token = os.environ['DUFFEL_API_KEY']
 client = Duffel(access_token=access_token)
+
+
+default_ranker, top_k_ranked = price_ranker, 3
 
 
 @tool
@@ -31,14 +36,17 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
             .return_offers()
             .execute()
     )   
-    offers = offer_request.offers
-    for idx, offer in enumerate(offers):
-        print(
-            f"{idx + 1}. {offer.owner.name} flight departing at "
-            + f"{offer.slices[0].segments[0].departing_at} "
-            + f"{offer.total_amount} {offer.total_currency}"
-        )
-    raise Exception()
+    offers = default_ranker(offer_request.offers)[:top_k_ranked]
+    res = [
+        {
+            'airline': offer.owner.name,
+            'departure_time': offer.slices[0].segments[0].departing_at.strftime('%Y-%m-%d'),
+            'num_flights': len(offer.slices[0].segments),
+            'USD_price': offer.total_amount
+        }
+        for offer in offers
+    ]
+    return json.dumps(res)
 
 
 @tool

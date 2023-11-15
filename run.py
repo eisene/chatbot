@@ -13,6 +13,7 @@ AGENT_DEFINITION_PROMPT = \
 "All you need for your tool is the origin, destination, and departure date. Assume the passenger is travelling alone "
 "and the budget is not important to them. They don't have any preferences of restrictions for their airlines or "
 "flights.\n\n"
+"Don't ask the user if they would like to book the flights, just list them.\n\n"
 "You are a very powerful assistant but you don't know today's date and need to look it up with a tool."
 
 prompt = ChatPromptTemplate.from_messages(
