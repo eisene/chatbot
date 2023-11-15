@@ -20,14 +20,18 @@ class FlightBookingAgent:
     "alone and the budget is not important to them. They don't have any preferences of restrictions for their airlines "
     "or flights.\n\n"
     "Don't ask the user if they would like to book the flights, just list them.\n\n"
-    "You are a very powerful assistant but you don't know today's date."
+    "Always show the user the IATA codes of the origin and destination airports!\n\n"
+    # "You are a very powerful assistant but you can only remember one origin and departure at a time. If you're given a "
+    # "new origin or departure, you immediately forget the old!"
+    USER_PROMPT = "{input} Remember that you can look up today's date if you need to. Don't forget the previous "
+    "information I gave you, such as the departure date!"
     MEMORY_KEY = "chat_history"
 
     llm_model_name = "gpt-3.5-turbo"
     llm_factory = ChatOpenAI
     llm_factory_kwargs = {'temperature': 0}
 
-    spinner_text = 'Waiting on LLM...'
+    spinner_text = 'Waiting on LLM and Duffel...'
     spinner = 'bouncingBall'
 
     def __init__(self, verbose_execution=False, **llm_factory_kwargs) -> None:
@@ -35,7 +39,7 @@ class FlightBookingAgent:
             [
                 ("system", FlightBookingAgent.AGENT_DEFINITION_PROMPT),
                 MessagesPlaceholder(variable_name=FlightBookingAgent.MEMORY_KEY),
-                ("user", "{input} Today's date is " + datetime.today().strftime('%Y-%m-%d')),
+                ("user", FlightBookingAgent.USER_PROMPT),
                 MessagesPlaceholder(variable_name="agent_scratchpad"),
             ]
         )

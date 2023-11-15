@@ -15,6 +15,7 @@ client = Duffel(access_token=access_token)
 default_ranker, top_k_ranked = price_ranker, 3
 
 num_api_errors, max_api_errors = 0, 2
+previous_lookups = set()
 
 
 class TooManyApiErrorsException(Exception):
@@ -28,10 +29,17 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
         destination: The IATA code of the destination city of the flight.
         departure_date: The departure date of the flight, formatted as YYYY-MM-DD.
     
-    When printing the results you get out of this tool, use the following format:
+    When composing your response based on the results of this tool, first write:
+        Here are {number of flights} flights from {origin IATA code} to {destination IATA code} leaving on {departure_date}
+    Then write down the flights using the following format for each flight:
         {index}.{airline} - Departs at {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
     """
-    global num_api_errors
+    global num_api_errors, previous_lookups
+
+    if (origin, destination, departure_date) in previous_lookups:
+        return f"You already looked this up!"
+    previous_lookups.add((origin, destination, departure_date))
+
     slices = [
         {
             "origin": origin,
