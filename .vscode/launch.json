@@ -11,6 +11,29 @@
             "program": "run.py",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "run.py -v",
+            "type": "python",
+            "request": "launch",
+            "program": "run.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-v"
+            ],
+            "justMyCode": true
+        }
+        ,
+        {
+            "name": "llama2",
+            "type": "python",
+            "request": "launch",
+            "program": "run.py",
+            "console": "integratedTerminal",
+            "args": [
+                "-v", "--llama2"
+            ],
+            "justMyCode": true
         }
     ]
 }
