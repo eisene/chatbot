@@ -27,14 +27,16 @@ examples = [
     #     "Actually, I meant the Cox Field airport in Paris, Texas.",
     #     "Can we change the departure date to seven days from now?"
     # ],
-    # THIS ONE IS COMPLETELY IMPOSSIBLE, IT NEVER GETS IT RIGHT IF IT DOESN'T HAVE AN IATA LOOKUP TOOL:
+    # THIS ONE IS COMPLETELY IMPOSSIBLE, IT NEVER GETS IT RIGHT:
     # [
     #     "I need a flight from Paris to Toronto tomorrow.",
     #     "Actually, I meant Paris, Texas.",
     # ],
     #
-    # The problem is that Paris, TEXAS is LLM hell - because it is an approximate retreiver, it _really_ wants to round
-    #   the question to the nearest thing it understands - some version of Paris, France
+    # The problem is that Paris, TEXAS is LLM hell - because it is an approximate retriever, it _really_ wants to round
+    #   the question to the nearest thing it "understands" - some version of Paris, France.
+    # I think it needs an IATA lookup tool that will force it to stop guessing. It may also need a smarter memory buffer
+    #   that isn't just the chat history.
 ]
 
 
