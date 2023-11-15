@@ -18,8 +18,23 @@ examples = [
     ],
     [
         "I need a flight from Paris to Toronto tomorrow.",
-        "Actually, I meant the Paris in Texas, not France.",
+        "Actually, I would like to go to Kitchener, ON.",
+        "Can we change the departure date to seven days from now?"
     ],
+    # THESE ARE TOO HARD FOR GPT-3.5 AND NEED SOME FUNDAMENTAL CHANGES TO THE APPROACH HERE:
+    # [
+    #     "I need a flight from Paris to Toronto tomorrow.",
+    #     "Actually, I meant the Cox Field airport in Paris, Texas.",
+    #     "Can we change the departure date to seven days from now?"
+    # ],
+    # THIS ONE IS COMPLETELY IMPOSSIBLE, IT NEVER GETS IT RIGHT IF IT DOESN'T HAVE AN IATA LOOKUP TOOL:
+    # [
+    #     "I need a flight from Paris to Toronto tomorrow.",
+    #     "Actually, I meant Paris, Texas.",
+    # ],
+    #
+    # The problem is that Paris, TEXAS is LLM hell - because it is an approximate retreiver, it _really_ wants to round
+    #   the question to the nearest thing it understands - some version of Paris, France
 ]
 
 
