@@ -3,7 +3,27 @@ import argparse
 from agent import FlightBookingAgent
 
 
-def main(verbose=False, llama2=False):
+examples = [
+    [
+        "I need a flight from New York to Chicago tomorrow.",
+        "Actually, I would like to change the date to Nov 20th.",
+    ],
+    [
+        "I need a flight from Paris to Toronto tomorrow.",
+        "Actually, I would like to change the date to Nov 20th.",
+    ],
+    [
+        "I need a flight from Paris to Toronto tomorrow.",
+        "Actually, I would like to leave in seven days.",
+    ],
+    [
+        "I need a flight from Paris to Toronto tomorrow.",
+        "Actually, I meant the Paris in Texas, not France.",
+    ],
+]
+
+
+def main(verbose=False, llama2=False, example_num=1):
     if llama2:
         raise NotImplementedError("Needs more work before it's usable")
         # print("USING LLAMA2, MAKE SURE OLLAMA IS INSTALLED AND LLAMA2 IS PULLED!")
@@ -19,8 +39,8 @@ def main(verbose=False, llama2=False):
         print("===")
 
 
-    interact("I need a flight from New York to Chicago tomorrow.")
-    interact("Actually, I would like to change the date to Nov 20th.")
+    for input in examples[example_num - 1]:
+        interact(input)
 
 
 if __name__ == '__main__':
@@ -30,5 +50,6 @@ if __name__ == '__main__':
     )
     parser.add_argument('-v', '--verbose', action='store_true')
     parser.add_argument('--llama2', action='store_true')
+    parser.add_argument('-e', '--example_num', default=1, type=int)
     args = parser.parse_args()
-    main(args.verbose, args.llama2)
+    main(args.verbose, args.llama2, args.example_num)
