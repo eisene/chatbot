@@ -2,7 +2,7 @@ import os
 import json
 from datetime import datetime
 from langchain.agents import tool
-from duffel_api import Duffel
+from duffel_api import Duffel, ApiError
 from flights_rankers import departure_time_ranker, price_ranker
 
 
@@ -13,6 +13,12 @@ client = Duffel(access_token=access_token)
 
 
 default_ranker, top_k_ranked = price_ranker, 3
+
+num_api_errors, max_api_errors = 0, 2
+
+
+class TooManyApiErrorsException(Exception):
+    pass
 
 
 @tool
@@ -25,6 +31,7 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
     When printing the results you get out of this tool, use the following format:
         {index}.{airline} - Departs at: {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
     """
+    global num_api_errors
     slices = [
         {
             "origin": origin,
@@ -32,14 +39,21 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
             "departure_date": departure_date,
         },
     ]
-    offer_request = (
-        client.offer_requests
-            .create()
-            .passengers([{"type": "adult"}])
-            .slices(slices)
-            .return_offers()
-            .execute()
-    )   
+    try:
+        offer_request = (
+            client.offer_requests
+                .create()
+                .passengers([{"type": "adult"}])
+                .slices(slices)
+                .return_offers()
+                .execute()
+        )   
+    except ApiError as err:
+        num_api_errors += 1
+        if num_api_errors >= max_api_errors:
+            raise TooManyApiErrorsException
+        return f"It seems something was wrong in your request. The error message is \"{err.message}\". Could you try " \
+               f"to fix your request and then try using this tool again?"
     offers = default_ranker(offer_request.offers)[:top_k_ranked]
     res = [
         {
