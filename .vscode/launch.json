@@ -25,13 +25,13 @@
         }
         ,
         {
-            "name": "llama2",
+            "name": "run.py -v -e 6",
             "type": "python",
             "request": "launch",
             "program": "run.py",
             "console": "integratedTerminal",
             "args": [
-                "-v", "--llama2"
+                "-v", "-e", "6"
             ],
             "justMyCode": true
         }

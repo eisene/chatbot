@@ -14,7 +14,7 @@ client = Duffel(access_token=access_token)
 
 default_ranker, top_k_ranked = price_ranker, 3
 
-num_api_errors, max_api_errors = 0, 2
+num_api_errors, max_api_errors = 0, 5
 previous_lookups = set()
 
 
@@ -29,8 +29,9 @@ def get_flights(origin: str, destination: str, departure_date: str) -> int:
         destination: The IATA code of the destination city of the flight.
         departure_date: The departure date of the flight, formatted as YYYY-MM-DD.
     
-    When composing your response based on the results of this tool, first write:
-        Here are {number of flights} flights from {origin IATA code} to {destination IATA code} leaving on {departure_date}
+    When composing your response based on the results of this tool, first write a sentece similar to these examples:
+        \"Here are 3 flights from New York (JFK) to Toronto (YYZ) leaving on 2020-01-01\", or
+        \"Here is 1 flight from Los Angeles (LAX) to Paris (CDG) leaving on 2022-10-15\"
     Then write down the flights using the following format for each flight:
         {index}.{airline} - Departs at {departure_time}, Number of connections: {num_connections}, Price: ${USD_price}
     """
